@@ -24,11 +24,21 @@ namespace GoogleSearchResultsTests
         [Test]
         public void Test1()
         {
+
+            System.Threading.Thread.Sleep(5000);
+
             var searchField = driver.FindElement(inputSearchField);
             searchField.SendKeys(searchText);
 
-            var googleSearch = driver.FindElement(googleSearchButton);
+            System.Threading.Thread.Sleep(5000);
+
+            searchField.SendKeys(Keys.Return);
+
+            /*var googleSearch = driver.FindElement(googleSearchButton);
             googleSearch.Click();
+
+            System.Threading.Thread.Sleep(5000);*/
+
         }
 
         [TearDown]

@@ -9,8 +9,6 @@ namespace GoogleSearchResultsTests
 
         private readonly By inputSearchField = By.XPath("//input[@class='gLFyf gsfi']");
         private const string searchText = "Who the fuck is Alice";
-        private readonly By googleSearchButton = By.XPath("//input[@name='btnK']");
-
 
         [SetUp]
         public void Setup()
@@ -34,10 +32,6 @@ namespace GoogleSearchResultsTests
 
             searchField.SendKeys(Keys.Return);
 
-            /*var googleSearch = driver.FindElement(googleSearchButton);
-            googleSearch.Click();
-
-            System.Threading.Thread.Sleep(5000);*/
 
         }
 

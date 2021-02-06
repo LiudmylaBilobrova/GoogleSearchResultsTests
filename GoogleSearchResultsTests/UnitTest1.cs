@@ -1,14 +1,16 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
+using System;
 
 namespace GoogleSearchResultsTests
 {
-    public class Tests
+    public class GoogleSearchResults
     {
         private IWebDriver driver;
 
         private readonly By inputSearchField = By.XPath("//input[@class='gLFyf gsfi']");
         private const string searchText = "Who the fuck is Alice";
+        private readonly By countElement = By.XPath("//h3[@class='LC20lb DKV0Md']");
 
         [SetUp]
         public void Setup()
@@ -20,7 +22,7 @@ namespace GoogleSearchResultsTests
         }
 
         [Test]
-        public void Test1()
+        public void SearchResultInspection()
         {
 
             System.Threading.Thread.Sleep(5000);
@@ -28,9 +30,22 @@ namespace GoogleSearchResultsTests
             var searchField = driver.FindElement(inputSearchField);
             searchField.SendKeys(searchText);
 
-            System.Threading.Thread.Sleep(5000);
+            //System.Threading.Thread.Sleep(5000);
 
             searchField.SendKeys(Keys.Return);
+
+            var searchResults = driver.FindElements(countElement);
+
+            Assert.IsTrue(searchResults[0].Text.Contains(searchText, StringComparison.OrdinalIgnoreCase));
+
+            Assert.IsTrue(searchResults[5].Displayed);
+
+            Assert.AreEqual(10, searchResults.Count);
+
+            /*var extractedText = searchResults[0].Text;
+            var formatedText = extractedText.IndexOf(searchText, StringComparison.OrdinalIgnoreCase);
+
+            Assert.IsTrue(pos != -1);*/
 
 
         }
@@ -38,7 +53,7 @@ namespace GoogleSearchResultsTests
         [TearDown]
         public void TearDown()
         {
-        
+            driver.Quit();
         }
     }
 }

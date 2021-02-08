@@ -1,59 +1,47 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 using System;
+
+
 
 namespace GoogleSearchResultsTests
 {
-    public class GoogleSearchResults
+    public class GoogleSearchResults : BaseTest
     {
-        private IWebDriver driver;
-
-        private readonly By inputSearchField = By.XPath("//input[@class='gLFyf gsfi']");
         private const string searchText = "Who the fuck is Alice";
-        private readonly By countElement = By.XPath("//h3[@class='LC20lb DKV0Md']");
 
-        [SetUp]
-        public void Setup()
-        {
-            driver = new OpenQA.Selenium.Chrome.ChromeDriver();
-            driver.Navigate().GoToUrl("https://www.google.com/");
-            driver.Manage().Window.Maximize();
-
-        }
 
         [Test]
         public void SearchResultInspection()
         {
+            new SearchPage(driver)
+                .Search(searchText)
+                .CheckResultContains10Results();
 
-            System.Threading.Thread.Sleep(5000);
+            // Page Objects
 
-            var searchField = driver.FindElement(inputSearchField);
-            searchField.SendKeys(searchText);
 
-            //System.Threading.Thread.Sleep(5000);
+            //wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(inputSearchField)); // old way
 
-            searchField.SendKeys(Keys.Return);
+            //wait.Until(drv => SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(inputSearchField)); // new way
 
-            var searchResults = driver.FindElements(countElement);
 
-            Assert.IsTrue(searchResults[0].Text.Contains(searchText, StringComparison.OrdinalIgnoreCase));
 
-            Assert.IsTrue(searchResults[5].Displayed);
+            //Assert.IsTrue(searchResults[0].Text.Contains(searchText, StringComparison.OrdinalIgnoreCase));
 
-            Assert.AreEqual(10, searchResults.Count);
+            //Assert.IsTrue(searchResults[5].Displayed);
+
+
+
+            //searchResults[0].Text.ShouldBeSameAs(searchText);
 
             /*var extractedText = searchResults[0].Text;
             var formatedText = extractedText.IndexOf(searchText, StringComparison.OrdinalIgnoreCase);
 
             Assert.IsTrue(pos != -1);*/
-
-
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-            driver.Quit();
-        }
     }
 }
